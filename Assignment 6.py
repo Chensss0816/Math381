@@ -82,7 +82,7 @@ def match_and_zero(matrix1, matrix2, cols):
 
     return matrix2
 
-# Strategy 0: Using no strategy, play the game randomly
+# Strategy 1: Using no strategy, play the game randomly
 # Stimulation of one knucklebones game
 '''
 while not matrix_ouccupied(player_board, rows, cols) and not matrix_ouccupied(opponent_board, rows, cols):
@@ -98,7 +98,7 @@ print(player_board)
 print(opponent_board)
 '''
 
-# Stimulation of 1000*1000 knucklebones game without using any strategies
+# Stimulation of 1000*1000 knucklebones game using S1
 '''
 games_win = []
 for run in range(1000):
@@ -124,7 +124,7 @@ for run in range(1000):
 print(games_win)
 '''
 
-# Stimulation of knucklebones game using No Strategy 10*100000
+# Stimulation of knucklebones game using S1 10*100000
 '''
 games_win = np.zeros((10,100000))
 long_term_prob = np.zeros((1,10))
@@ -204,7 +204,7 @@ print("Upper Bound:", upper_bound)
 '''
 
 
-# Strategy 1: Make eliminating opponents’ dice a priority
+# Strategy 2: Make eliminating opponents’ dice a priority
 def prior_remove(matrix1, matrix2, rows, cols, number):
     for col in range(cols): # check whether the number rolled appears in opponent's board
         column2 = [row[col] for row in matrix2]
@@ -237,7 +237,8 @@ def prior_remove(matrix1, matrix2, rows, cols, number):
         random_col = random.randint(0, cols - 1)
     matrix1[random_row][random_col] = number
     return matrix1, matrix2
-# Stimulation of knucklebones game using Strategy 1 1000*1000
+
+# Stimulation of knucklebones game using Strategy 2 1000*1000
 '''
 games_win = []
 for run in range(1000):
@@ -262,8 +263,8 @@ for run in range(1000):
 print(games_win)
 '''
 
-# Stimulation of knucklebones game using Strategy 1 10*100000
-'''
+# Stimulation of knucklebones game using Strategy 2 10*100000
+
 games_win = np.zeros((10,100000))
 long_term_prob = np.zeros((1,10))
 for run in range(10):
@@ -320,6 +321,7 @@ plt.ylabel('Player winning Probability')
 # Display the graph
 plt.show()
 
+'''
 # Calculate the mean and standard deviation
 mean = np.mean(long_term_prob)
 std = np.std(long_term_prob)
@@ -340,7 +342,7 @@ print("Lower Bound:", lower_bound)
 print("Upper Bound:", upper_bound)
 '''
 
-# code for running 1 game with Strategy 1
+# code for running 1 game with Strategy 2
 # while not matrix_ouccupied(player_board, rows, cols) and not matrix_ouccupied(opponent_board, rows, cols):
 #     player_dice = roll_dice()  # player roll the dice
 #     player_board, opponent_board = prior_remove(player_board, opponent_board, rows, cols, player_dice)  # prior removal
@@ -352,7 +354,7 @@ print("Upper Bound:", upper_bound)
 # print(player_board)
 # print(opponent_board)
 
-# Strategy 2:  if we roll numbers greater or equal to 3, we put the same numbers
+# Strategy 3:  if we roll numbers greater or equal to 3, we put the same numbers
 # in different columns. If we have numbers 1 or 2, we put them in the same column
 def place_dice(matrix, rows, cols, large_number, number):
     if number >= large_number:
@@ -375,7 +377,7 @@ def place_dice(matrix, rows, cols, large_number, number):
 
     return matrix
 
-# code for running 1 game with Strategy 2
+# code for running 1 game with Strategy 3
 '''
 while not matrix_ouccupied(player_board, rows, cols) and not matrix_ouccupied(opponent_board, rows, cols):
     player_dice = roll_dice()  # player roll the dice
@@ -390,7 +392,7 @@ print(player_board)
 print(opponent_board)
 '''
 
-# Stimulation of knucklebones game using strategy 2 1000*1000
+# Stimulation of knucklebones game using strategy 3 1000*1000
 # games_win = []
 # for run in range(1000):
 #     player_win_count = 0
@@ -414,19 +416,19 @@ print(opponent_board)
 #     player_win_prob = player_win_count / total_games
 #     games_win.append(player_win_prob)
 # print(games_win)
-
+#
 # plt.hist(games_win, edgecolor='black', density=True)
 # # Adding labels and title
 # plt.xlabel('Probability of the player winning the game')
 # plt.ylabel('Frequency')
-# plt.title('Strategy 1 versus Strategy 3')
-
+# plt.title('Histogram')
+#
 # # Displaying the plot
 # plt.show()
 
-# Stimulation of 10*100000 knucklebones game using strategy 2
+# Stimulation of 10*100000 knucklebones game using strategy 3
 '''
-games_win_2 = np.zeros((10,10000))
+games_win_2 = np.zeros((10,100000))
 long_term_prob_2 = np.zeros((1,10))
 large_number_1 = 6
 large_number_2 = 6
@@ -506,7 +508,7 @@ print("Lower Bound:", lower_bound)
 print("Upper Bound:", upper_bound)
 '''
 
-# Strategy 3: remove opponent's dice first, if no remove, try to spread the large numbers
+# Strategy 4: remove opponent's dice first, if no remove, try to spread the large numbers
 def combined(matrix1, matrix2, rows, cols, large_number, number):
     for col in range(cols): # check whether the number rolled appears in opponent's board
         column2 = [row[col] for row in matrix2]
@@ -553,7 +555,6 @@ def combined(matrix1, matrix2, rows, cols, large_number, number):
     return matrix1, matrix2
 
 # check whether it works
-
 '''
 matrix1 = [[1,0,4],
            [1,6,0],
@@ -567,8 +568,6 @@ large_number = 3
 matrix1, matrix2 = combined(matrix1, matrix2, rows, cols, large_number, 2)
 print(matrix1)
 print(matrix2)
-'''
-'''
 '''
 # S3 1000*1000
 '''
@@ -584,7 +583,7 @@ for run in range(1000):
             player_dice = roll_dice()  # player roll the dice
             player_board, opponent_board  = combined(player_board, opponent_board, rows, cols, large_number, player_dice)  # player place the dice
             opponent_dice = roll_dice()  # opponent roll the dice
-            opponent_board = place_dice(opponent_board, rows, cols, large_number_2, opponent_dice)  # player place the dice
+            opponent_board, player_board  = combined( opponent_board, player_board, rows, cols, large_number, opponent_dice)  # player place the dice
         player_score = get_score(player_board, cols)
         opponent_score = get_score(opponent_board, cols)
         if player_score > opponent_score:
@@ -594,8 +593,7 @@ for run in range(1000):
     games_win.append(player_win_prob)
 print(games_win)
 '''
-
-# Stimulation of 10*100000 knucklebones game using strategy 3
+# Stimulation of 10*100000 knucklebones game using strategy 4
 '''
 games_win_3 = np.zeros((10,100000))
 long_term_prob_3 = np.zeros((1,10))
@@ -622,78 +620,41 @@ for run in range(10):
     long_term_prob_3[0,run] = games_win_3[run,100000-1]
     win_count = 0
 
-'''
-'''
-# data for convergence plot
-run_1 = games_win_3[0, :1000]
-run_2 = games_win_3[1, :1000]
-run_3 = games_win_3[2, :1000]
-run_4 = games_win_3[3, :1000]
-run_5 = games_win_3[4, :1000]
-run_6 = games_win_3[5, :1000]
-run_7 = games_win_3[6, :1000]
-run_8 = games_win_3[7, :1000]
-run_9 = games_win_3[8, :1000]
-run_10 = games_win_3[9, :1000]
-x = range(1000)
 
-# Plot the data vectors
-plt.plot(x, run_1)
-plt.plot(x, run_2)
-plt.plot(x, run_3)
-plt.plot(x, run_4)
-plt.plot(x, run_5)
-plt.plot(x, run_6)
-plt.plot(x, run_7)
-plt.plot(x, run_8)
-plt.plot(x, run_9)
-plt.plot(x, run_10)
-'''
-# Compare different strategy
-games_win_2 = np.zeros((10,100000))
-long_term_prob_2 = np.zeros((1,10))
-large_number_1 = 6
-large_number_2 = 6
-for run in range(10):
-    win_count = 0
-    total_games = 0
-    for i in range(100000):
-        player_board = [[0] * cols for i in range(rows)]
-        opponent_board = [[0] * cols for i in range(rows)]
-        while not matrix_ouccupied(player_board, rows, cols) and not matrix_ouccupied(opponent_board, rows, cols):
-            player_dice = roll_dice()  # player roll the dice
-            player_board, opponent_board  = combined(player_board, opponent_board, rows, cols, 3, player_dice) # the opponent's dice may be removed
-            opponent_dice = roll_dice()  # opponent roll the dice
-            opponent_board, player_board = prior_remove(opponent_board, player_board, rows, cols,
-                                                        opponent_dice) # opponent place the dice
-            player_board = match_and_zero(opponent_board, player_board, cols) # the player's dice may be removed # opponent place the dice # the player's dice may be removed
-        player_score = get_score(player_board, cols)
-        opponent_score = get_score(opponent_board, cols)
-        if player_score > opponent_score:
-            win_count += 1
-        total_games += 1
-        player_win_prob_2 = win_count / total_games
-        games_win_2[run, i] = player_win_prob_2
-    long_term_prob_2[0,run] = games_win_2[run,100000-1]
-    win_count = 0
-
-
-
-
-
-'''
-
+# # data for convergence plot
+# run_1 = games_win_3[0, :1000]
+# run_2 = games_win_3[1, :1000]
+# run_3 = games_win_3[2, :1000]
+# run_4 = games_win_3[3, :1000]
+# run_5 = games_win_3[4, :1000]
+# run_6 = games_win_3[5, :1000]
+# run_7 = games_win_3[6, :1000]
+# run_8 = games_win_3[7, :1000]
+# run_9 = games_win_3[8, :1000]
+# run_10 = games_win_3[9, :1000]
+# x = range(1000)
+# 
+# # Plot the data vectors
+# plt.plot(x, run_1)
+# plt.plot(x, run_2)
+# plt.plot(x, run_3)
+# plt.plot(x, run_4)
+# plt.plot(x, run_5)
+# plt.plot(x, run_6)
+# plt.plot(x, run_7)
+# plt.plot(x, run_8)
+# plt.plot(x, run_9)
+# plt.plot(x, run_10)
 
 # Add labels and legend
 plt.ylabel('Player winning Probability')
 
 # Display the graph
 plt.show()
-'''
 
 # Calculate the mean and standard deviation
-mean = np.mean(long_term_prob_2)
-std = np.std(long_term_prob_2)
+mean = np.mean(long_term_prob_3)
+std = np.std(long_term_prob_3)
 n = 10
 
 # Calculate the standard error
@@ -709,5 +670,7 @@ upper_bound = mean + moe
 # Print the confidence interval
 print("Lower Bound:", lower_bound)
 print("Upper Bound:", upper_bound)
+'''
+
 
 
